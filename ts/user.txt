@@ -1,0 +1,4 @@
+4 eunjeong localhost LEVEL_0 normal 0 newbie 1
+4 eunseong localhost LEVEL_0 normal 0 newbie 2
+4 test1 localhost LEVEL_0 normal 0 newbie 16
+5 test2 localhost LEVEL_0 normal 0 newbie 7
