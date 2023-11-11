@@ -14,54 +14,87 @@ Server::Server(int port, std::string password) : port(port), password(password),
 
 void Server::init()
 {
+	/*
+	1번째 매개변수:	 주소 체계(Address Family) 	/ AF_INET 
+					AF_INET는 IPv4 주소를 사용하는 것을 나타냄
+	2번째 매개변수:  소켓의 타입 ()				/ SOCK_STEAM   
+					SOCK_STREAM은 연결 지향형 소켓, 이는 TCP를 사용하는 소켓
+	3번째 매개변수:  프로토콜을 의미함, 
+					0은 주어진 주소 체계와 타입에 따라 시스템이 적절한 프로토콜을 선택하도록 하는 것을 의미함.
+	*/
+    this->server_socket = socket(AF_INET, SOCK_STREAM, 0); // 서버 소켓 생성
 
-	
-	this->server_socket = socket(AF_INET, SOCK_STREAM, 0);
-	const int value = 1;
-	if (setsockopt(this->server_socket, SOL_SOCKET, SO_REUSEADDR, &value, sizeof(value)) != 0)
-		throw std::runtime_error("set server socket error");
 
-	sockaddr_in server_address;
+    // 소켓 옵션 설정 (주로 소켓 재사용을 위해 설정)
+    const int value = 1;
+
+	//소켓옵션선택함 / 설정하는 소켓   /   소켓레벨  /소켓재사용옵션 / 
+    if (setsockopt(this->server_socket, SOL_SOCKET, SO_REUSEADDR, &value, sizeof(value)) != 0)
+        throw std::runtime_error("set server socket error");
+
+    // 서버 주소 구조체 초기화 및 설정
+    sockaddr_in server_address;
+    memset(&server_address, 0, sizeof(server_address));
+    server_address.sin_family = AF_INET;
+    server_address.sin_addr.s_addr = INADDR_ANY;
+    server_address.sin_port = htons(this->port);
 
 
-	memset(&server_address, 0, sizeof(server_address));
-	server_address.sin_family = AF_INET;
-	server_address.sin_addr.s_addr = INADDR_ANY;
-	server_address.sin_port = htons(this->port);
+	/*
+    소켓에 주소 할당 (바인드)
+	sockfd : 앞서 socket 함수로 생성된 endpoint 소켓의 식별 번호
+	my_addr : IP 주소와 port 번호를 저장하기 위한 변수가 있는 구조체
+	namelen : 두 번째 인자의 데이터 크기
+	반환값 : 성공하면 0, 실패하면 -1
+	*/
 
-	if (bind(this->server_socket, (struct sockaddr *)&server_address, sizeof(server_address)) == -1)
-	{
-		close(server_socket);
-		throw bindError();
-	}
-	if (listen(server_socket, 15) == -1)
-	{
-		close(server_socket);
-		throw listenError();
-	}
-	fcntl(this->server_socket, F_SETFL, O_NONBLOCK);
+    if (bind(this->server_socket, (struct sockaddr *)&server_address, sizeof(server_address)) == -1)
+    {
+        close(server_socket);
+        throw bindError();
+    }
 
-	this->kq = kqueue();
+    // 소켓을 수동 대기 모드로 전환하여 클라이언트 연결을 대기
+    if (listen(server_socket, 15) == -1)
+    {
+        close(server_socket);
+        throw listenError();
+    }
 
-	if (kq == -1)
-	{
-		close(server_socket);
-		throw kqueueError();
-	}
-	// 서버 소켓의 read를 큐에 등록
-	changeEvent(change_list, this->server_socket, EVFILT_READ, EV_ADD | EV_ENABLE, 0, 0, NULL);
+    // 소켓을 비블록 모드로 설정 -> 효율적인 다중 처리를 위한 함수
+    fcntl(this->server_socket, F_SETFL, O_NONBLOCK);
+
+    // kqueue를 생성하여 이벤트 처리를 위한 파일 디스크립터를 얻음
+    this->kq = kqueue();
+
+    // kqueue 생성 실패 시 예외 처리
+    if (kq == -1)
+    {
+        close(server_socket);
+        throw kqueueError();
+    }
+
+    // 서버 소켓의 read 이벤트를 큐에 등록
+    changeEvent(change_list, this->server_socket, EVFILT_READ, EV_ADD | EV_ENABLE, 0, 0, NULL);
 }
+
 
 // change_list 에 새 이벤트 추가
 void Server::changeEvent(std::vector<struct kevent> &change_list, uintptr_t ident, int16_t filter, uint16_t flags, uint32_t fflags, intptr_t data, void *udata)
 {
-	struct kevent temp_event;
+    // kevent 구조체를 생성하고 초기화
+    struct kevent temp_event;
 
-	// kevent 구조체인 temp_event를 인자들로 설정
-	EV_SET(&temp_event, ident, filter, flags, fflags, data, udata);
-	// 설정한 이벤트를 kevent 배열에 추가
-	this->change_list.push_back(temp_event);
+    // EV_SET 매크로를 사용하여 kevent 구조체에 이벤트 정보를 설정
+    // EV_SET(kev, ident, filter, flags, fflags, data, udata)
+    // kev: kevent 구조체, ident: 식별자(파일 디스크립터 또는 식별 번호), filter: 이벤트 필터, flags: 이벤트 플래그, fflags: 이벤트 플래그의 추가 정보, data: 필터에 대한 데이터, udata: 사용자 데이터
+    EV_SET(&temp_event, ident, filter, flags, fflags, data, udata);
+
+    // 설정한 이벤트를 kevent 배열에 추가
+    // change_list: kevent 배열, temp_event: 추가할 이벤트
+    this->change_list.push_back(temp_event);
 }
+
 
 void Server::run()
 {
@@ -144,6 +177,7 @@ void Server::run()
                         clients[curr_event->ident].addBuffer(buf);
                         std::cout << "received data from " << curr_event->ident << ": " << clients[curr_event->ident].getBuffer() << std::endl;
 						// 읽은 데이터 파싱해서 write할 데이터 클라이언트 배열의 버퍼에 넣기
+						// 여기로 들어가면 여러함수들 실행됨
 						parseData(clients[curr_event->ident]);
 						// 버퍼가 비어있지 않은 경우에만 write 이벤트로 전환
 						if (!send_data[curr_event->ident].empty())
