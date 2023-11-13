@@ -28,7 +28,7 @@ void Server::init()
     // 소켓 옵션 설정 (주로 소켓 재사용을 위해 설정)
     const int value = 1;
 
-	//소켓옵션선택함 / 설정하는 소켓   /   소켓레벨  /소켓재사용옵션 / 
+	// 소켓옵션선택함/   설정하는 소켓   /  소켓레벨 / 소켓재사용옵션 / 
     if (setsockopt(this->server_socket, SOL_SOCKET, SO_REUSEADDR, &value, sizeof(value)) != 0)
         throw std::runtime_error("set server socket error");
 
@@ -38,7 +38,6 @@ void Server::init()
     server_address.sin_family = AF_INET;
     server_address.sin_addr.s_addr = INADDR_ANY;
     server_address.sin_port = htons(this->port);
-
 
 	/*
     소켓에 주소 할당 (바인드)

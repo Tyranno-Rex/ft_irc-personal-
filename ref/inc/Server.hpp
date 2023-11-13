@@ -75,22 +75,22 @@
 #define RPL_INVITE(user, nick, channel)											":" + user + " INVITE " + nick + " :" + channel
 #define RPL_MODE(user, channel, modes, params)									":" + user + " MODE " + channel + " " + modes + params
 #define RPL_NICK(before, after)													":" + before + " NICK :" + after
-
 class Server
 {
 private:
-	int port;
-	std::string password;
-	int server_socket;
-	int kq;
-	std::string servername;
-	std::vector<struct kevent> change_list;
-	struct kevent *curr_event;
-	std::vector<char> buffer;
-	struct kevent event_list[1024];
-	std::map<std::string, Channel *> channels;
-	std::map<int, Client> clients;
-	std::map<int, std::string> send_data;
+    int port;  // 서버가 listen할 포트 번호
+    std::string password;  // 서버에 접속하기 위한 비밀번호
+    int server_socket;  // 서버 소켓의 파일 디스크립터
+    int kq;  // kqueue(이벤트 기반 I/O 모델)의 파일 디스크립터
+    std::string servername;  // 서버의 이름
+    std::vector<struct kevent> change_list;  // kqueue에 등록된 변경 이벤트 리스트
+    struct kevent *curr_event;  // 현재 처리 중인 이벤트
+    std::vector<char> buffer;  // 데이터를 임시로 저장하는 버퍼
+    struct kevent event_list[1024];  // 이벤트 리스트 (고정 크기 1024)
+    std::map<std::string, Channel *> channels;  // 서버에 등록된 채널 목록 (채팅방 등)
+    std::map<int, Client> clients;  // 현재 서버에 접속한 클라이언트 목록
+    std::map<int, std::string> send_data;  // 클라이언트에게 보낼 데이터 목록
+
 
 public:
 	Server();
@@ -113,6 +113,23 @@ public:
 	void disconnectClient(int client_fd);
 	void parseData(Client &client);
 	std::string makeCRLF(const std::string &cmd);
+
+
+	/*명령어 기반 함수 작성해야함*/
+	/*
+	pass 
+	user
+	join 
+	PRIVMSG
+	KICK
+	MODE
+	INVITE
+	PART
+	LIST
+	WHO
+	*/
+
+
 
 	std::string handleJoin(Client &client, std::stringstream &buffer_stream);
 	std::string handlePass(Client &client, std::stringstream &buffer_stream);
