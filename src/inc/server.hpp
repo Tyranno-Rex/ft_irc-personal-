@@ -56,24 +56,23 @@ class server
 {
 // 가지고 잇어야하는 변수
 private:
-    kevnet
+    strcut 
 public:
     server();
     ~server();
 
-
 	/*
 	명령어 기반 함수 작성해야함 -> 최소 구현 함수들
-	pass/user/join/PRIVMSG/KICK/MODE/NVITE/PART/LIST/WHO
+	JOIN/PASS/NICK/USER/PINGPONG/QUIT/WHO/PRIVMSG/LIST/TOPIC/PART/KICK/INVITE/MODE
 	*/
+
     void FuncPass();
     void FuncUser();
-
 };
 
 server::server()
 {
-    
+    server
 }
 
 server::~server()

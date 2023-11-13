@@ -201,7 +201,7 @@ void Server::run()
 						int n;
 						std::cout << "send data from " << curr_event->ident << ": " << this->send_data[curr_event->ident] << std::endl;
 						if ((n = send(curr_event->ident, this->send_data[curr_event->ident].c_str(),
-									  this->send_data[curr_event->ident].size(), 0) == -1))
+										this->send_data[curr_event->ident].size(), 0) == -1))
 						{
 							// 전송하다 에러난 경우 연결 끊기
 							std::cerr << "client write error!" << std::endl;
