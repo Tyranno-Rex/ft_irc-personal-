@@ -375,7 +375,7 @@ std::string Server::handleWho(Client &client, std::stringstream &buffer_stream)
 							option += "@";
 
 						reply = RPL_WHOREPLY(client.getNickname(), ch_name, u_it->second.getUsername(), u_it->second.getHostname(),
-											 u_it->second.getServername(), u_it->second.getNickname(), option, u_it->second.getRealname());
+											su_it->second.getServername(), u_it->second.getNickname(), option, u_it->second.getRealname());
 						response += makeCRLF(reply);
 					}
 				}
@@ -401,7 +401,7 @@ std::string Server::handleWho(Client &client, std::stringstream &buffer_stream)
 					}
 
 					reply = RPL_WHOREPLY(client.getNickname(), ch_name, u_it->second.getUsername(), u_it->second.getHostname(),
-										 u_it->second.getServername(), u_it->second.getNickname(), option, u_it->second.getRealname());
+										u_it->second.getServername(), u_it->second.getNickname(), option, u_it->second.getRealname());
 					response += makeCRLF(reply);
 				}
 			}
