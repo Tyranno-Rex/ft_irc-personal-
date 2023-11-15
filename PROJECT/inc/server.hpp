@@ -56,19 +56,27 @@ public:
 
 
     void run();
-    std::string funcjoin(Client &client, std::stringstream &buffer_stream);
 
     void setPort(unsigned int port);
     unsigned int getPort();
-
     void setServerSocket(int socket);
     int getServerSocket();
-
     void setServername(std::string &name);
     std::string getServername();
-
     std::map<int, Client> getClient();
     std::map<std::string, Channel*> getchannel();
+    
+    std::string func_pass(Client &client, std::stringstream &buffer_stream);
+    std::string func_nick(Client &client, std::stringstream &buffer_stream);
+    std::string func_user(Client &client, std::stringstream &buffer_stream);
+    std::string func_quit(Client &client, std::stringstream &buffer_stream);
+    std::string func_join(Client &client, std::stringstream &buffer_stream);
+    std::string func_topic(Client &client, std::stringstream &buffer_stream);
+    std::string func_kick(Client &client, std::stringstream &buffer_stream);
+    std::string func_part(Client &client, std::stringstream &buffer_stream);
+    std::string func_mode(Client &client, std::stringstream &buffer_stream);
+    std::string func_name(Client &client, std::stringstream &buffer_stream);
+    std::string func_privmsg(Client &client, std::stringstream &buffer_stream);
 };
 
 // void joinChannel(const std::string& username, const std::string& channelName) {
