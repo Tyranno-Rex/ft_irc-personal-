@@ -48,19 +48,3 @@ void Channel::setTopic(std::string &topic){
 std::string Channel::getTopic(){
     return this->_topic;
 }
-
-int main() {
-    Server server;
-
-    // 예시 사용법
-    server.joinChannel("user1", "#channel1");
-    server.joinChannel("user2", "#channel1");
-
-    server.kickUser("user1", "user2", "#channel1");
-
-    server.sendMessage("user1", "#channel1", "Hello, everyone!");
-
-    server.inviteUser("user1", "user3", "#channel1");
-
-    return 0;
-}
