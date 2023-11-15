@@ -49,54 +49,8 @@ std::string Channel::getTopic(){
     return this->_topic;
 }
 
-
-
-
-// void join(const std::string& username) {
-//     users.push_back(username);
-// }
-
-// void kick(const std::string& kicker, const std::string& target) {
-//     auto targetIt = std::find(users.begin(), users.end(), target);
-
-//     if (targetIt != users.end()) {
-//         users.erase(targetIt);
-//         std::cout << target << " has been kicked from the channel" << std::endl;
-//     } else {
-//         std::cout << target << " is not in the channel" << std::endl;
-//     }
-// }
-
-// const std::vector<std::string>& getUsers() const {
-//     return users;
-// }
-// void Channel::join(const std::string& username) {
-//     this->users.push_back(username);
-// };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 int main() {
-    IRCServer server;
+    Server server;
 
     // 예시 사용법
     server.joinChannel("user1", "#channel1");

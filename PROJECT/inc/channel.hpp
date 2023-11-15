@@ -1,9 +1,26 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
+#ifndef CHANNEL_HPP
+#define CHANNEL_HPP
+
 #include <unordered_map>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <sys/event.h>
+#include <arpa/inet.h>
+#include <sys/time.h>
+#include <algorithm>
+#include <exception>
+#include <iostream>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sstream>
+#include <cstring>
+#include <vector>
 #include <string>
+#include <ctime>
 #include <map>
+#include <set>
+
 
 //  /mode #채널명 +i (초대한 사람만 들어올수 있게함)
 //  /mode #채널명 +t (op만 TOPIC을 변경할 수 있게 함)
@@ -46,3 +63,5 @@ public:
     void setMode(unsigned int mode);
     unsigned int getMode();
 };
+
+#endif // !CHANNEL_HPP

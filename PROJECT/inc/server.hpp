@@ -1,20 +1,7 @@
-// #include <sys/time.h>
-// #include <sys/socket.h>
-// #include <netinet/in.h>
-// #include <sys/event.h>
-// #include <unistd.h>
-#include <sys/types.h>
-#include <fcntl.h>
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <ctime>
-#include <vector>
-#include <map>
-#include <set>
-#include <algorithm>
-#include <exception>
+#ifndef SERVER_HPP
+#define SERVER_HPP
 
+#include "channel.hpp"
 /*
 https://hyeonski.tistory.com/9
 
@@ -51,62 +38,67 @@ data: filter에 따라 다르게 적용되는 data값이다. EVFILT_READ의 경�
 udata: event와 함께 등록하여 event return시 사용할 수 있는 user-data이다. udata 또한 event의 식별자로 사용될 수 있다(optional - kevent64() 및 kevent_qos()는 인자 flags로 udata를 식별자로 사용할지 말지 결정할 수 있다).
 */
 
-// class server
-// {
-// // 가지고 잇어야하는 변수
-// private:
-//     strcut 
-// public:
-//     server();
-//     ~server();
+class Server {
+private:
+    unsigned int        _port;  				// 서버가 listen할 포트 번호
+    std::string         _password;  			// 서버에 접속하기 위한 비밀번호
+    int                 _server_socket;  		// 서버 소켓의 파일 디스크립터
+    std::string         _servername;  			// 서버의 이름
+    std::map<int, Client> _clients;  		    // 현재 서버에 접속한 클라이언트 목록
+    std::vector<struct kevent> _change_list;    // kqueue에 등록된 변경 이벤트 리스트
+    std::map<std::string, Channel *> _channels; // 서버에 등록된 채널 목록 (채팅방 등)
+    // std::map<int, std::string> send_data;  	// 클라이언트에게 보낼 데이터 목록 
 
-// 	/*
-// 	명령어 기반 함수 작성해야함 -> 최소 구현 함수들
-// 	JOIN/PASS/NICK/USER/PINGPONG/QUIT/WHO/PRIVMSG/LIST/TOPIC/PART/KICK/INVITE/MODE
-// 	*/
+public:
+    Server();
+    ~Server();
+    Server(unsigned int port, std::string password);
 
-//     void FuncPass();
-//     void FuncUser();
-// };
 
-// server::server()
-// {
-//     server
+    void run();
+    std::string funcjoin(Client &client, std::stringstream &buffer_stream);
+
+    void setPort(unsigned int port);
+    unsigned int getPort();
+
+    void setServerSocket(int socket);
+    int getServerSocket();
+
+    void setServername(std::string &name);
+    std::string getServername();
+
+    std::map<int, Client> getClient();
+    std::map<std::string, Channel*> getchannel();
+};
+
+
+
+
+
+
+// void joinChannel(const std::string& username, const std::string& channelName) {
+//     channels[channelName].join(username);
 // }
 
-// server::~server()
-// {
+// void kickUser(const std::string& kicker, const std::string& target, const std::string& channelName) {
+//     auto& channel = channels[channelName];
+//     channel.kick(kicker, target);
 // }
 
+// void sendMessage(const std::string& sender, const std::string& target, const std::string& message) {
+//     std::cout << sender << " sends to " << target << ": " << message << std::endl;
+// }
 
-// class IRCServer {
-// private:
-//     std::unordered_map<std::string, Channel> channels;
-//     std::unordered_map<std::string, std::string> users;
+// void inviteUser(const std::string& inviter, const std::string& target, const std::string& channelName) {
+//     auto& channel = channels[channelName];
+//     const auto& users = channel.getUsers();
+//     auto targetIt = std::find(users.begin(), users.end(), target);
 
-// public:
-//     void joinChannel(const std::string& username, const std::string& channelName) {
-//         channels[channelName].join(username);
+//     if (targetIt != users.end()) {
+//         std::cout << target << " is already in the channel" << std::endl;
+//     } else {
+//         std::cout << inviter << " invites " << target << " to the channel" << std::endl;
 //     }
+// }
 
-//     void kickUser(const std::string& kicker, const std::string& target, const std::string& channelName) {
-//         auto& channel = channels[channelName];
-//         channel.kick(kicker, target);
-//     }
-
-//     void sendMessage(const std::string& sender, const std::string& target, const std::string& message) {
-//         std::cout << sender << " sends to " << target << ": " << message << std::endl;
-//     }
-
-//     void inviteUser(const std::string& inviter, const std::string& target, const std::string& channelName) {
-//         auto& channel = channels[channelName];
-//         const auto& users = channel.getUsers();
-//         auto targetIt = std::find(users.begin(), users.end(), target);
-
-//         if (targetIt != users.end()) {
-//             std::cout << target << " is already in the channel" << std::endl;
-//         } else {
-//             std::cout << inviter << " invites " << target << " to the channel" << std::endl;
-//         }
-//     }
-// };
+#endif // !SERVER_HPP

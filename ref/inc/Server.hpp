@@ -114,7 +114,6 @@ public:
     void disconnectClient(int client_fd);				// 클라이언트 연결 종료
     void parseData(Client &client);					    // 클라이언트로부터 수신된 데이터 파싱
     std::string makeCRLF(const std::string &cmd);	    // 명령에 CRLF(Carriage Return, Line Feed)를 추가
-};
 
 
 	std::string handleJoin(Client &client, std::stringstream &buffer_stream);
