@@ -1,5 +1,5 @@
-#ifndef SERVER_HPP
-#define SERVER_HPP
+// #ifndef SERVER_HPP
+// #define SERVER_HPP
 
 #include "channel.hpp"
 /*
@@ -71,11 +71,6 @@ public:
     std::map<std::string, Channel*> getchannel();
 };
 
-
-
-
-
-
 // void joinChannel(const std::string& username, const std::string& channelName) {
 //     channels[channelName].join(username);
 // }
@@ -101,4 +96,4 @@ public:
 //     }
 // }
 
-#endif // !SERVER_HPP
+// #endif // !SERVER_HPP

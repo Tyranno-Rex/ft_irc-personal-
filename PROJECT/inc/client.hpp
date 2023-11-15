@@ -1,5 +1,5 @@
-#ifndef CLIENT_HPP
-#define CLIENT_HPP
+// #ifndef CLIENT_HPP
+// #define CLIENT_HPP
 
 #include "channel.hpp"
 #include "server.hpp"
@@ -36,4 +36,5 @@ public:
 
     void joinChannel(Channel *channel);
 };
-#endif // !CLIENT_HPP
+
+// #endif // !CLIENT_HPP

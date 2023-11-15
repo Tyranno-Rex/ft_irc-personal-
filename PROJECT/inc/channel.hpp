@@ -1,5 +1,5 @@
-#ifndef CHANNEL_HPP
-#define CHANNEL_HPP
+// #ifndef CHANNEL_HPP
+// #define CHANNEL_HPP
 
 #include <unordered_map>
 #include <netinet/in.h>
@@ -64,4 +64,4 @@ public:
     unsigned int getMode();
 };
 
-#endif // !CHANNEL_HPP
+// #endif // !CHANNEL_HPP

@@ -1,6 +1,3 @@
-#ifndef MAIN_CPP
-#define MAIN_CPP
-
 #include "../inc/server.hpp"
 #include "../inc/client.hpp"
 #include "../inc/channel.hpp"/
@@ -47,5 +44,3 @@ int main() {
 
     return 0;
 }
-
-#endif // DEBUG
