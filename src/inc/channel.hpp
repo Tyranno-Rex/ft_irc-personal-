@@ -1,0 +1,49 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <unordered_map>
+#include <string>
+#include <map>
+
+//  /mode #채널명 +i (초대한 사람만 들어올수 있게함)
+//  /mode #채널명 +t (op만 TOPIC을 변경할 수 있게 함)
+//  /mode #채널명 +k 비밀번호 (채널에 비밀번호를 설정)
+//  /mode #채널명 +o 닉네임 (op권한을 줌)
+//  /mode #채널명 +l number (number 만큼 입장가능 인원을 제한함)
+#define MODE_  0;
+#define MODE_I 1;
+#define MODE_T 2;
+#define MODE_K 3;
+#define MODE_O 4;
+#define MODE_L 5;
+
+class Channel {
+private:
+    std::vector<std::string, Client> _users;
+    std::map<std::string, Client> _op_user;
+
+    std::string _name;
+    std::string _pass;
+    std::string _topic;
+
+
+    unsigned int _user_limit;
+    unsigned int _mode; 
+public:
+    Channel();
+    ~Channel();
+    Channel(std::string &name, std::string &pass, Client &client);
+};
+
+
+class Client {
+private:
+    std::string realname;
+    std::string nickname;
+
+public:
+    Client();
+    ~Client();
+    std::string getname();
+};
+
