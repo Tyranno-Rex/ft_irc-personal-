@@ -19,31 +19,30 @@
 
 class Channel {
 private:
-    std::vector<std::string, Client> _users;
+    std::map<std::string, Client> _users;
     std::map<std::string, Client> _op_user;
 
     std::string _name;
     std::string _pass;
     std::string _topic;
 
-
     unsigned int _user_limit;
     unsigned int _mode; 
+
 public:
     Channel();
     ~Channel();
     Channel(std::string &name, std::string &pass, Client &client);
+
+    void setName(std::string &name);
+    std::string getName();
+
+    void setPassword(std::string &pass);
+    std::string getPassword(); // 이거 해야하나?
+
+    void setTopic(std::string &topic);
+    std::string getTopic();
+
+    void setMode(unsigned int mode);
+    unsigned int getMode();
 };
-
-
-class Client {
-private:
-    std::string realname;
-    std::string nickname;
-
-public:
-    Client();
-    ~Client();
-    std::string getname();
-};
-

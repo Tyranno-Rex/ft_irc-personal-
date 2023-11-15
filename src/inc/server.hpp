@@ -1,9 +1,8 @@
-
-#include <sys/time.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <sys/event.h>
-#include <unistd.h>
+// #include <sys/time.h>
+// #include <sys/socket.h>
+// #include <netinet/in.h>
+// #include <sys/event.h>
+// #include <unistd.h>
 #include <sys/types.h>
 #include <fcntl.h>
 #include <iostream>
@@ -52,29 +51,62 @@ data: filter에 따라 다르게 적용되는 data값이다. EVFILT_READ의 경�
 udata: event와 함께 등록하여 event return시 사용할 수 있는 user-data이다. udata 또한 event의 식별자로 사용될 수 있다(optional - kevent64() 및 kevent_qos()는 인자 flags로 udata를 식별자로 사용할지 말지 결정할 수 있다).
 */
 
-class server
-{
-// 가지고 잇어야하는 변수
-private:
-    strcut 
-public:
-    server();
-    ~server();
+// class server
+// {
+// // 가지고 잇어야하는 변수
+// private:
+//     strcut 
+// public:
+//     server();
+//     ~server();
 
-	/*
-	명령어 기반 함수 작성해야함 -> 최소 구현 함수들
-	JOIN/PASS/NICK/USER/PINGPONG/QUIT/WHO/PRIVMSG/LIST/TOPIC/PART/KICK/INVITE/MODE
-	*/
+// 	/*
+// 	명령어 기반 함수 작성해야함 -> 최소 구현 함수들
+// 	JOIN/PASS/NICK/USER/PINGPONG/QUIT/WHO/PRIVMSG/LIST/TOPIC/PART/KICK/INVITE/MODE
+// 	*/
 
-    void FuncPass();
-    void FuncUser();
-};
+//     void FuncPass();
+//     void FuncUser();
+// };
 
-server::server()
-{
-    server
-}
+// server::server()
+// {
+//     server
+// }
 
-server::~server()
-{
-}
+// server::~server()
+// {
+// }
+
+
+// class IRCServer {
+// private:
+//     std::unordered_map<std::string, Channel> channels;
+//     std::unordered_map<std::string, std::string> users;
+
+// public:
+//     void joinChannel(const std::string& username, const std::string& channelName) {
+//         channels[channelName].join(username);
+//     }
+
+//     void kickUser(const std::string& kicker, const std::string& target, const std::string& channelName) {
+//         auto& channel = channels[channelName];
+//         channel.kick(kicker, target);
+//     }
+
+//     void sendMessage(const std::string& sender, const std::string& target, const std::string& message) {
+//         std::cout << sender << " sends to " << target << ": " << message << std::endl;
+//     }
+
+//     void inviteUser(const std::string& inviter, const std::string& target, const std::string& channelName) {
+//         auto& channel = channels[channelName];
+//         const auto& users = channel.getUsers();
+//         auto targetIt = std::find(users.begin(), users.end(), target);
+
+//         if (targetIt != users.end()) {
+//             std::cout << target << " is already in the channel" << std::endl;
+//         } else {
+//             std::cout << inviter << " invites " << target << " to the channel" << std::endl;
+//         }
+//     }
+// };

@@ -19,7 +19,7 @@
 class Channel {
 	private:
 		std::string name;
-		std::string password;
+		std::string password;						
 		long long user_limit;
 		time_t create_time;
 		Client owner;
