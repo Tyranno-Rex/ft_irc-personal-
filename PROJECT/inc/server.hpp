@@ -1,7 +1,6 @@
 // #ifndef SERVER_HPP
 // #define SERVER_HPP
 
-#include "channel.hpp"
 /*
 https://hyeonski.tistory.com/9
 
@@ -38,47 +37,6 @@ data: filter에 따라 다르게 적용되는 data값이다. EVFILT_READ의 경�
 udata: event와 함께 등록하여 event return시 사용할 수 있는 user-data이다. udata 또한 event의 식별자로 사용될 수 있다(optional - kevent64() 및 kevent_qos()는 인자 flags로 udata를 식별자로 사용할지 말지 결정할 수 있다).
 */
 
-class Server {
-private:
-    unsigned int        _port;  				// 서버가 listen할 포트 번호
-    std::string         _password;  			// 서버에 접속하기 위한 비밀번호
-    int                 _server_socket;  		// 서버 소켓의 파일 디스크립터
-    std::string         _servername;  			// 서버의 이름
-    std::map<int, Client> _clients;  		    // 현재 서버에 접속한 클라이언트 목록
-    std::vector<struct kevent> _change_list;    // kqueue에 등록된 변경 이벤트 리스트
-    std::map<std::string, Channel *> _channels; // 서버에 등록된 채널 목록 (채팅방 등)
-    // std::map<int, std::string> send_data;  	// 클라이언트에게 보낼 데이터 목록 
-
-public:
-    Server();
-    ~Server();
-    Server(unsigned int port, std::string password);
-
-
-    void run();
-
-    void setPort(unsigned int port);
-    unsigned int getPort();
-    void setServerSocket(int socket);
-    int getServerSocket();
-    void setServername(std::string &name);
-    std::string getServername();
-    std::map<int, Client> getClient();
-    std::map<std::string, Channel*> getchannel();
-    
-    std::string func_pass(Client &client, std::stringstream &buffer_stream);
-    std::string func_nick(Client &client, std::stringstream &buffer_stream);
-    std::string func_user(Client &client, std::stringstream &buffer_stream);
-    std::string func_quit(Client &client, std::stringstream &buffer_stream);
-    std::string func_join(Client &client, std::stringstream &buffer_stream);
-    std::string func_topic(Client &client, std::stringstream &buffer_stream);
-    std::string func_kick(Client &client, std::stringstream &buffer_stream);
-    std::string func_part(Client &client, std::stringstream &buffer_stream);
-    std::string func_mode(Client &client, std::stringstream &buffer_stream);
-    std::string func_name(Client &client, std::stringstream &buffer_stream);
-    std::string func_privmsg(Client &client, std::stringstream &buffer_stream);
-};
-
 // void joinChannel(const std::string& username, const std::string& channelName) {
 //     channels[channelName].join(username);
 // }
@@ -105,3 +63,46 @@ public:
 // }
 
 // #endif // !SERVER_HPP
+
+#include "channel.hpp"
+#include "client.hpp"
+
+class Server {
+private:
+    unsigned int            _port;  			// 서버가 listen할 포트 번호
+    std::string             _password;  		// 서버에 접속하기 위한 비밀번호
+    int                     _server_socket;  	// 서버 소켓의 파일 디스크립터
+    std::string             _servername;  		// 서버의 이름
+    std::map<int, Client>   _clients;  		    // 현재 서버에 접속한 클라이언트 목록
+    std::vector<struct kevent> _change_list;    // kqueue에 등록된 변경 이벤트 리스트
+    std::map<std::string, Channel *> _channels; // 서버에 등록된 채널 목록 (채팅방 등)
+    // std::map<int, std::string> send_data;  	// 클라이언트에게 보낼 데이터 목록 
+
+public:
+    Server();
+    ~Server();
+    Server(unsigned int port, std::string password);
+
+    void run();
+
+    void setPort(unsigned int port);
+    unsigned int getPort();
+    void setServerSocket(int socket);
+    int getServerSocket();
+    void setServername(std::string &name);
+    std::string getServername();
+    std::map<int, Client> getClient();
+    std::map<std::string, Channel*> getchannel();
+    
+    std::string func_pass(Client &client, std::stringstream &buffer_stream);
+    std::string func_nick(Client &client, std::stringstream &buffer_stream);
+    std::string func_user(Client &client, std::stringstream &buffer_stream);
+    std::string func_quit(Client &client, std::stringstream &buffer_stream);
+    std::string func_join(Client &client, std::stringstream &buffer_stream);
+    std::string func_topic(Client &client, std::stringstream &buffer_stream);
+    std::string func_kick(Client &client, std::stringstream &buffer_stream);
+    std::string func_part(Client &client, std::stringstream &buffer_stream);
+    std::string func_mode(Client &client, std::stringstream &buffer_stream);
+    std::string func_name(Client &client, std::stringstream &buffer_stream);
+    std::string func_privmsg(Client &client, std::stringstream &buffer_stream);
+};
